@@ -27,7 +27,7 @@ void touch(const char *name) {
         close(fd);
 }
 
-int http_read_line(int fd, char *buf, size_t size)
+int http_read_line(int fd, char *buf, size_t size)  // 限制读入字符长度，无栈溢出
 {
     size_t i = 0;
 
@@ -73,7 +73,7 @@ const char *http_request_line(int fd, char *reqpath, char *env, size_t *env_len)
         return "Socket IO error";
 
     /* Parse request like "GET /foo.html HTTP/1.0" */
-    sp1 = strchr(buf, ' ');
+    sp1 = strchr(buf, ' ');  // 判断字符串buf中是否有空格
     if (!sp1)
         return "Cannot parse HTTP request (1)";
     *sp1 = '\0';
@@ -102,7 +102,7 @@ const char *http_request_line(int fd, char *reqpath, char *env, size_t *env_len)
     }
 
     /* decode URL escape sequences in the requested path into reqpath */
-    url_decode(reqpath, sp1);
+    url_decode(reqpath, sp1); // error
 
     envp += sprintf(envp, "REQUEST_URI=%s", reqpath) + 1;
 
@@ -440,6 +440,7 @@ void http_serve_executable(int fd, const char *pn)
 
 void url_decode(char *dst, const char *src)
 {
+     // 验证是否进行了边界检查?
     for (;;)
     {
         if (src[0] == '%' && src[1] && src[2])
@@ -459,7 +460,7 @@ void url_decode(char *dst, const char *src)
         }
         else
         {
-            *dst = *src;
+            *dst = *src;  // 没有进行src的栈溢出检查
             src++;
 
             if (*dst == '\0')

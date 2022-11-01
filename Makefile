@@ -21,9 +21,9 @@ all: $(PROGS)
 
 zookd: %: %.o http.o
 zookd-exstack: %-exstack: %.o http.o
-	$(CC) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@ -z execstack
+	$(CC) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@ -z execstack  # 栈内容可执行
 zookd-nxstack: %-nxstack: %.o http.o
-	$(CC) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@
+	$(CC) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@               # 栈不可执行
 zookd-withssp: %: %.o http-withssp.o
 run-shellcode: %: %.o
 

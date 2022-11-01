@@ -65,7 +65,7 @@ static int run_server(const char *port) {
 	int pid;
 	int status;
 
-	if (cltfd < 0)
+	if (cltfd < 0)   // 接收一个客户端的描述符
 	    err(1, "accept");
 
 	/* fork a new process for each client process, because the process
@@ -74,13 +74,14 @@ static int run_server(const char *port) {
 	 * that state when we have processed the request and start the next
 	 * request in a pristine state.
          */
+    // 
 	switch ((pid = fork()))
 	{
 	case -1:
 	    err(1, "fork");
 
 	case 0:
-	    process_client(cltfd);
+	    process_client(cltfd);   // fork出来子进程，process_client 进行处理
 	    exit(0);
 	    break;
 
@@ -107,7 +108,7 @@ static void process_client(int fd)
     if ((errmsg = http_request_line(fd, reqpath, env, &env_len)))
         return http_err(fd, 500, "http_request_line: %s", errmsg);
 
-    env_deserialize(env, sizeof(env));
+    env_deserialize(env, sizeof(env));   // 解析新的环境变量
 
     /* get all headers */
     if ((errmsg = http_request_headers(fd)))

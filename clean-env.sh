@@ -19,6 +19,6 @@ if [ "$DIR" != /home/student/lab ]; then
     echo "your solutions may not work when grading."
     echo "========================================================"
 fi
-# setarch -R disables ASLR
+# setarch -R disables ASLR  # 关闭内存分布随机化，禁用后每次执行之后程序位置都是固定的
 echo exec env - PWD="$DIR" SHLVL=0 setarch "$(uname -m)" -R "$@"
 exec env - PWD="$DIR" SHLVL=0 setarch "$(uname -m)" -R "$@"
